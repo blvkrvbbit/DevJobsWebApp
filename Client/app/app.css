@@ -13,7 +13,7 @@
   --color-dark-grey: #6e8098;
   --breakpoint-*: initial;
   --breakpoint-md: 768px;
-  --breakpoint-lg: 1440px;
+  --breakpoint-lg: 1200px;
 }
 
 html,
@@ -67,4 +67,54 @@ button,
 label {
   font-size: 1.6rem;
   line-height: 2.6rem;
+}
+
+.custom-checkbox {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.custom-checkbox + label {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.custom-checkbox + label::before {
+  content: "";
+  display: inline-block;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex-shrink: 0;
+  flex-grow: 0;
+  background: #19202d;
+  border: none;
+  opacity: 0.1035;
+  border-radius: 0.3rem;
+  margin-right: 1.6rem;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50% 50%;
+}
+
+.custom-checkbox.dark + label::before {
+  background: #fff;
+}
+
+.custom-checkbox:hover + label::before {
+  background: #5964e0;
+  opacity: 0.25;
+}
+
+.custom-checkbox:checked + label::before {
+  background: #5964e0;
+  opacity: 1;
+  background-image: url("/assets/desktop/icon-check.svg");
+  background-repeat: no-repeat;
+  background-position: center;
 }
