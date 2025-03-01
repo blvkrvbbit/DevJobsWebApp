@@ -1,9 +1,9 @@
 import cn from "~/utils/cn";
-import Container from "../container/container.component";
-import "./navbar.styles.css";
+import Container from "../Container/Container";
+import "./navbar.css";
 
 import { Link } from "react-router";
-import SearchBar from "../search-bar/search-bar.component";
+import SearchBar from "../SearchBar/SearhBar";
 
 /**
  *
@@ -27,7 +27,6 @@ const Navbar = () => {
           <img src="/assets/desktop/icon-moon.svg" alt="" />
         </div>
       </Container>
-      <SearchBar />
     </div>
   );
 };
