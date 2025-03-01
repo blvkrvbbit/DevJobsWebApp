@@ -4,6 +4,9 @@ import { useState, type ChangeEvent } from "react";
 import { defaultSearch, type SearchFieldTypes } from "./search-field.types";
 import { useStore } from "~/store/useStore";
 
+/**
+ * TODO: Add filtering based on full time
+ */
 const SearchBar = () => {
   const {
     dispatch,
@@ -13,19 +16,28 @@ const SearchBar = () => {
 
   const handleChange = (e: ChangeEvent) => {
     const { name, value } = e.target as HTMLInputElement;
+
     if (value.length === 0) {
       dispatch({
         type: "RESET",
       });
     } else {
-      setSearch({
-        ...search,
-        [name]: value,
-      });
+      if (name === "fullTimeOnly") {
+        setSearch({
+          ...search,
+          [name]: !search.fullTimeOnly,
+        });
+      } else {
+        setSearch({
+          ...search,
+          [name]: value,
+        });
+      }
     }
   };
 
   const handleSearch = () => {
+    console.log(search);
     if (search.position.length > 0 && search.location.length > 0) {
       dispatch({
         type: "FILTER_JOBS_BY_POSITION",
@@ -146,9 +158,12 @@ const SearchBar = () => {
           <div className="flex w-full justify-between  items-center  pl-[2rem] md:max-w-[25.2rem] lg:max-w-[34.5rem]">
             <div className="font-bold w-full">
               <input
+                onChange={handleChange}
                 className={cn("custom-checkbox", theme.darkMode && "dark")}
                 id="myCheckbox"
                 type="checkbox"
+                // checked={search.fullTimeOnly}
+                name="fullTimeOnly"
               />
               <label
                 htmlFor="myCheckbox"
