@@ -7,7 +7,7 @@ import { type ThemeState } from "./theme/theme.reducer";
 
 interface Action<T = any, P = any> {
   type: T;
-  payload: P;
+  payload?: P;
 }
 
 interface AppState {
