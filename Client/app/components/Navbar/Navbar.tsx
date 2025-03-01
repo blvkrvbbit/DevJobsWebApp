@@ -3,7 +3,7 @@ import Container from "../Container/Container";
 import "./navbar.css";
 
 import { Link } from "react-router";
-import SearchBar from "../SearchBar/SearhBar";
+import SearchBar from "../SearchBar/SearchBar";
 import { useStore } from "~/store/useStore";
 
 /**
