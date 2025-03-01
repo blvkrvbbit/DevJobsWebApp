@@ -1,4 +1,4 @@
-// import { useStore } from "~/context/StoreContext";
+import { useStore } from "~/store/useStore";
 import type { Job } from "~/types/job.type";
 import cn from "~/utils/cn";
 
@@ -7,12 +7,14 @@ type Props = {
 };
 
 const Card = ({ job }: Props) => {
-  // const { state } = useStore();
+  const {
+    state: { theme },
+  } = useStore();
   return (
     <div
       className={cn(
-        "relative px-[3.2rem] pt-[4.9rem] pb-[3.3rem] rounded-[0.6rem] bg-white"
-        // state.theme.mode === "dark" ? "bg-very-dark-blue" : "bg-white"
+        "relative px-[3.2rem] pt-[4.9rem] pb-[3.3rem] rounded-[0.6rem] bg-white",
+        theme.darkMode ? "bg-very-dark-blue" : "bg-white"
       )}
     >
       <div
@@ -31,12 +33,7 @@ const Card = ({ job }: Props) => {
         <div className="bg-dark-grey w-[0.4rem] h-[0.4rem] rounded-full"></div>
         <p>{job.contract}</p>
       </div>
-      <h3
-        className={cn(
-          "mb-[1.7rem]"
-          // state.theme.mode === "dark" && "text-white"
-        )}
-      >
+      <h3 className={cn("mb-[1.7rem]", theme.darkMode && "text-white")}>
         {job.position}
       </h3>
       <p className="text-dark-grey mb-[4rem]">{job.company}</p>
