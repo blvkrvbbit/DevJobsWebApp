@@ -1,5 +1,5 @@
 import cn from "~/utils/cn";
-import Container from "../container/container.component";
+import Container from "../Container/Container";
 import { useState, type ChangeEvent } from "react";
 import { defaultSearch, type SearchFieldTypes } from "./search-field.types";
 
@@ -122,13 +122,15 @@ const SearchBar = () => {
                 className="block"
                 // className={cn(state.theme.mode === "dark" && "text-white")}
               >
-                {" "}
-                Full Time
+                <span>
+                  {" "}
+                  Full Time <span className="md:hidden lg:inline">Only</span>
+                </span>
               </label>
             </div>
             <button
               // onClick={handleSearch}
-              className="bg-violet py-[1.6rem] lg:w-full px-[1.4rem] text-white rounded-[0.5rem] block ml-auto "
+              className="bg-violet py-[1.6rem] lg:w-[12.3rem] lg:px-[3.55rem] px-[1.4rem] text-white rounded-[0.5rem] block ml-auto "
             >
               Search
             </button>
