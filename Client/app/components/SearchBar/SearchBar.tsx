@@ -2,12 +2,63 @@ import cn from "~/utils/cn";
 import Container from "../Container/Container";
 import { useState, type ChangeEvent } from "react";
 import { defaultSearch, type SearchFieldTypes } from "./search-field.types";
+import { useStore } from "~/store/useStore";
 
+/**
+ * TODO: Add filtering based on full time
+ */
 const SearchBar = () => {
+  const {
+    dispatch,
+    state: { theme },
+  } = useStore();
   const [search, setSearch] = useState<SearchFieldTypes>(defaultSearch);
 
   const handleChange = (e: ChangeEvent) => {
     const { name, value } = e.target as HTMLInputElement;
+
+    if (value.length === 0) {
+      dispatch({
+        type: "RESET",
+      });
+    } else {
+      if (name === "fullTimeOnly") {
+        setSearch({
+          ...search,
+          [name]: !search.fullTimeOnly,
+        });
+      } else {
+        setSearch({
+          ...search,
+          [name]: value,
+        });
+      }
+    }
+  };
+
+  const handleSearch = () => {
+    console.log(search);
+    if (search.position.length > 0 && search.location.length > 0) {
+      dispatch({
+        type: "FILTER_JOBS_BY_POSITION",
+        payload: search.position,
+      });
+      dispatch({
+        type: "FILTER_JOBS_BY_LOCATION",
+        payload: search.location,
+      });
+    } else if (search.position.length > 0) {
+      console.log("position");
+      dispatch({
+        type: "FILTER_JOBS_BY_POSITION",
+        payload: search.position,
+      });
+    } else if (search.location.length > 0) {
+      dispatch({
+        type: "FILTER_JOBS_BY_LOCATION",
+        payload: search.location,
+      });
+    }
   };
 
   return (
@@ -19,25 +70,24 @@ const SearchBar = () => {
             onChange={handleChange}
             className={cn(
               "w-full h-[8rem]  rounded-md p-[2.4rem] outline-0",
-              "bg-white text-very-dark-blue placeholder-very-dark-blue/50"
-              // state.theme.mode === "dark"
-              //   ? "bg-very-dark-blue text-white/50 placeholder-white/50"
-              //   : "bg-white text-very-dark-blue placeholder-very-dark-blue"
+              "bg-white text-very-dark-blue placeholder-very-dark-blue/50",
+              theme.darkMode &&
+                "bg-very-dark-blue text-white/50 placeholder-white/50"
             )}
             type="text"
           />
           <button
             className={cn(
-              "absolute top-[3rem] right-[8.803rem] cursor-pointer"
-              // state.theme.mode === "dark" && "invert brightness-0"
+              "absolute top-[3rem] right-[8.803rem] cursor-pointer",
+              theme.darkMode && "dark"
             )}
           >
             <img
               // onClick={toggleFilter}
-              // className={cn(
-              //   "absolute top-[3rem] right-[8.803rem] cursor-pointer"
-              //   // state.theme.mode === "dark" && "invert brightness-0"
-              // )}
+              className={cn(
+                "absolute top-[3rem] right-[8.803rem] cursor-pointer",
+                theme.darkMode && "invert brightness-0"
+              )}
               src="/assets/mobile/icon-filter.svg"
               alt=""
             />
@@ -48,7 +98,7 @@ const SearchBar = () => {
               "bg-violet absolute right-[1.6rem] top-[1.6rem] z-2 p-[1.4rem] rounded-[0.5rem]",
               "h-[4.8rem] w-[4.8rem] cursor-pointer"
             )}
-            // onClick={handleSearch}
+            onClick={handleSearch}
           >
             <img
               className="invert brightness-0"
@@ -61,8 +111,8 @@ const SearchBar = () => {
       <Container
         className={cn(
           "hidden md:block  mx-auto  rounded-tl-md rounded-bl-md md:max-w-[68.9rem] rounded-tr-md rounded-br-md",
-          "bg-white"
-          // state.theme.mode === "dark" ? "bg-very-dark-blue" : "bg-white"
+          "bg-white",
+          theme.darkMode && "dark"
         )}
       >
         <div className="relative w-full flex px-7">
@@ -73,10 +123,9 @@ const SearchBar = () => {
               name="position"
               className={cn(
                 "w-full h-[8rem]   rounded-tl-md rounded-bl-md p-[2.4rem] pl-[4rem] outline-0 border-grey/20 border-r-[0.01rem]",
-                "bg-white text-very-dark-blue placeholder-very-dark-blue/50"
-                // state.theme.mode === "dark"
-                //   ? "bg-very-dark-blue text-white/50 placeholder-white/50"
-                //   : "bg-white text-very-dark-blue placeholder-very-dark-blue/50"
+                "bg-white text-very-dark-blue placeholder-very-dark-blue/50",
+                theme.darkMode &&
+                  "bg-very-dark-blue text-white/50 placeholder-white/50"
               )}
               type="text"
             />
@@ -94,10 +143,9 @@ const SearchBar = () => {
               className={cn(
                 "w-full h-[8rem]  p-[2.4rem] pl-[5.6rem] outline-0 border-grey/20 border-r-[0.01rem]",
                 "rounded-tl-md rounded-bl-md",
-                "bg-white text-very-dark-blue placeholder-very-dark-blue/50"
-                // state.theme.mode === "dark"
-                //   ? "bg-very-dark-blue text-white/50 placeholder-white/50"
-                //   : "bg-white text-very-dark-blue placeholder-very-dark-blue/50"
+                "bg-white text-very-dark-blue placeholder-very-dark-blue/50",
+                theme.darkMode &&
+                  "bg-very-dark-blue text-white/50 placeholder-white/50"
               )}
               type="text"
             />
@@ -110,17 +158,19 @@ const SearchBar = () => {
           <div className="flex w-full justify-between  items-center  pl-[2rem] md:max-w-[25.2rem] lg:max-w-[34.5rem]">
             <div className="font-bold w-full">
               <input
-                className={cn(
-                  "custom-checkbox"
-                  // state.theme.mode === "dark" && "dark"
-                )}
+                onChange={handleChange}
+                className={cn("custom-checkbox", theme.darkMode && "dark")}
                 id="myCheckbox"
                 type="checkbox"
+                // checked={search.fullTimeOnly}
+                name="fullTimeOnly"
               />
               <label
                 htmlFor="myCheckbox"
-                className="block"
-                // className={cn(state.theme.mode === "dark" && "text-white")}
+                className={cn(
+                  "block",
+                  theme.darkMode && "bg-very-dark-blue text-white"
+                )}
               >
                 <span>
                   {" "}
@@ -129,7 +179,7 @@ const SearchBar = () => {
               </label>
             </div>
             <button
-              // onClick={handleSearch}
+              onClick={handleSearch}
               className="bg-violet py-[1.6rem] lg:w-[12.3rem] lg:px-[3.55rem] px-[1.4rem] text-white rounded-[0.5rem] block ml-auto "
             >
               Search
