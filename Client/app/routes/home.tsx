@@ -1,5 +1,5 @@
-import { useStore } from "~/store/useStore";
 import type { Route } from "./+types/home";
+import { useStore } from "~/store/useStore";
 import Container from "~/components/Container/Container";
 import JobList from "~/components/JobList/JobList";
 import SearchBar from "~/components/SearchBar/SearchBar";
